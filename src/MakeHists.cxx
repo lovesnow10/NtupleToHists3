@@ -81,7 +81,8 @@ bool MakeHists::run(TTree *event, map<string, float> weights,
     // Fakes!
     // bool isFake = false;
     mSample = Tools::Instance().GetSampleType(mcChannel);
-    if (mSample == "DATA" && w.first != "nominal") continue;
+    if (mSample == "DATA" && w.first != "nominal")
+      continue;
 
     // Get Weights!
     float mWeights = Tools::Instance().GetWeight(mcChannel);
@@ -91,6 +92,9 @@ bool MakeHists::run(TTree *event, map<string, float> weights,
       if (mSample == "ttbar") {
         mSample = doHeavyFlavor(mEvent);
       }
+      if (mSample == "ttbb" &&
+          (w.first == "NNLO_topPtUp" || w.first == "NNLO_ttbarPtUP"))
+        continue;
 
       float weight_mc =
           *(Tools::Instance().GetTreeValue<float>(mEvent, "weight_mc"));
@@ -120,7 +124,7 @@ bool MakeHists::run(TTree *event, map<string, float> weights,
           mWeights = mWeights * weight_mc * weight_pileup * weight_jvt *
                      weight_leptonSF * weights["weight_ttbb_Nominal"];
       }
-      //Syst weight
+      // Syst weight
       mWeights *= w.second;
     }
 
@@ -170,10 +174,11 @@ bool MakeHists::run(TTree *event, map<string, float> weights,
         }
       }
       if (isNominal) {
-      mRawYields.at(region).at(mSample) += 1;
-      mWeightedYields.at(region).at(mSample) += (weights["norm"] * mWeights);
-      mWeightedYieldsError.at(region).at(mSample) +=
-          (weights["norm"] * mWeights) * (weights["norm"] * mWeights);}
+        mRawYields.at(region).at(mSample) += 1;
+        mWeightedYields.at(region).at(mSample) += (weights["norm"] * mWeights);
+        mWeightedYieldsError.at(region).at(mSample) +=
+            (weights["norm"] * mWeights) * (weights["norm"] * mWeights);
+      }
       std::vector<string> vars = mConfig->GetRegionVars(region);
       for (auto var : vars) {
         float value;
@@ -216,8 +221,10 @@ bool MakeHists::run(TTree *event, map<string, float> weights,
           }
         }
         string SysName;
-        if (isNominal) SysName = w.first;
-        else SysName = tmpTreeName;
+        if (isNominal)
+          SysName = w.first;
+        else
+          SysName = tmpTreeName;
         string hname = Tools::Instance().GenName(var, region, mSample, SysName);
         if (hs->HasHist(hname)) {
           hs->GetHist(hname)->Fill(value, mWeights * weights["norm"]);
