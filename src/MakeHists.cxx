@@ -29,7 +29,9 @@ bool MakeHists::initialize(ConfigParser *config, DSHandler *ds) {
   mVarToCalc.push_back("phi_lep1");
   mVarToCalc.push_back("phi_lep2");
 
-  mSysName = config->GetCommonSetting("TreeSysName");
+  mSysName.clear();
+  if (config->HasCommonSetting("TreeSysName"))
+    mSysName = config->GetCommonSetting("TreeSysName");
   return true;
 }
 

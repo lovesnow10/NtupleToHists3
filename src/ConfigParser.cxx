@@ -147,6 +147,13 @@ std::vector<string> ConfigParser::GetCommonSetting(string settingname) {
   return v;
 }
 
+bool ConfigParser::HasCommonSetting(string settingname) {
+  bool has = false;
+  if (mCommonSettingMap.find(settingname) != mCommonSettingMap.end())
+    has = true;
+  return has;
+}
+
 std::vector<string> ConfigParser::GetRegionVars(string RegionName) {
   std::vector<string> var;
   if (mRegionVarMap.find(RegionName) != mRegionVarMap.end()) {

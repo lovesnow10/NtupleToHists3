@@ -38,6 +38,7 @@ public:
   string GetRegionCut(string RegionName);
   std::vector<float> GetVarBinning(std::string RegionName, std::string VarName);
   std::vector<string> GetCommonSetting(string settingname);
+  bool HasCommonSetting(string settingname);
   vector<string> GetRegionVars(string RegionName);
 };
 

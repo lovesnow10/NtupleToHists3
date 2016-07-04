@@ -431,6 +431,7 @@ COMMON HFSplit 1 #no effect, because in code I always do it
 COMMON DTTree nominal #the TTree to loop over with DATA
 COMMON MCTree nominal_Loose #the TTree(s) to loop over with MC, include sysmetic trees here
 COMMON CalSysmetic 1 #do sysmetic or not
+#COMMON TreeSysName #sysmetics that are weights saved as a branch in nominal tree
 COMMON XSFile /Users/Shana/workarea/ATLASanalysis/XSection-MC15-13TeV-fromSusyGrp.data
 COMMON NormFile /Users/Shana/workarea/ATLASanalysis/Ntuple2Hists/data/ttbbNormRw.root
 COMMON ShapeFile /Users/Shana/workarea/ATLASanalysis/Ntuple2Hists/data/ttbbShapeRw.root
