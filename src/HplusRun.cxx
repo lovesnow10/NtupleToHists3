@@ -97,7 +97,7 @@ bool HplusRun::run() {
 
       long nentries = mWorker->GetEntries();
       if (nentries == 0) {
-        files = mDS->Next();
+        //files = mDS->Next();
         continue;
       }
       long messageSlice = long(nentries / 6);
@@ -137,7 +137,7 @@ bool HplusRun::run() {
       }
 
       // Main loop!
-      printf("Start Loop %i\n", mcChannel != 0 ? mcChannel : runNumber);
+      printf("Start Loop Tree %s of %i\n", mTreeName.c_str(), mcChannel != 0 ? mcChannel : runNumber);
       for (long ientry = 0; ientry < nentries; ++ientry) {
         if ((mProcessed >= mMaxProcess) && (mMaxProcess > 0)) {
           printf("HplusRun:: Run:: Reach Max Process Number %ld\n",

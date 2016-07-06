@@ -59,7 +59,7 @@ bool MakeHists::run(TTree *event, map<string, float> weights,
       if (w.first == "norm" || w.first == "weight_NNLO" ||
           w.first == "weight_ttbb_Nominal")
         continue;
-      string tmpName = w.first.substr(7);
+      string tmpName = w.first.substr(0, w.first.find("_weight"));
       mSysWeights[tmpName] = w.second;
     }
 
