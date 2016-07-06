@@ -121,10 +121,10 @@ bool MakeHists::run(TTree *event, map<string, float> weights,
         if (!isTRF)
           mWeights = mWeights * weight_mc * weight_pileup * weight_jvt *
                      weight_leptonSF * weight_bTagSF_77 *
-                     weights["weight_ttbb_Nominal"];
+                     weights["ttbb_Nominal_weight"];
         else
           mWeights = mWeights * weight_mc * weight_pileup * weight_jvt *
-                     weight_leptonSF * weights["weight_ttbb_Nominal"];
+                     weight_leptonSF * weights["ttbb_Nominal_weight"];
       }
       // Syst weight
       mWeights *= w.second;
