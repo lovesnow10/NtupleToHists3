@@ -77,6 +77,8 @@ bool HplusRun::run() {
     else
       mRun = mDTTree;
     for (auto mTreeName : mRun) {
+      mWorker->Reset();
+      mHelpWorker->Reset();
       mWorker->SetName(mTreeName.c_str());
       for (auto file : files) {
         mWorker->Add(file.c_str());
