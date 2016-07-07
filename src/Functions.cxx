@@ -107,3 +107,191 @@ string doHeavyFlavor(TTree *event) {
   else
     return "ttbb";
 }
+
+std::map<string, float> GetSysWeights(TTree *event) {
+  std::map<string, float> mSysWeights;
+  mSysWeights["pileup_UP"] =
+      *(Tools::Instance().GetTreeValue<float>(event, "weight_pileup_UP"));
+  mSysWeights["pileup_DOWN"] =
+      *(Tools::Instance().GetTreeValue<float>(event, "wegiht_pileup_DOWN"));
+  mSysWeights["jvt_UP"] =
+      *(Tools::Instance().GetTreeValue<float>(event, "weight_jvt_UP"));
+  mSysWeights["jvt_DOWN"] =
+      *(Tools::Instance().GetTreeValue<float>(event, "weight_jvt_DOWN"));
+  mSysWeights["leptonSF_EL_SF_Trigger_UP"] =
+      *(Tools::Instance().GetTreeValue<float>(
+          event, "weight_leptonSF_EL_SF_Trigger_UP"));
+  mSysWeights["leptonSF_EL_SF_Trigger_DOWN"] =
+      *(Tools::Instance().GetTreeValue<float>(
+          event, "weight_leptonSF_EL_SF_Trigger_DOWN"));
+  mSysWeights["leptonSF_EL_SF_Reco_UP"] =
+      *(Tools::Instance().GetTreeValue<float>(event,
+                                              "weight_leptonSF_EL_SF_Reco_UP"));
+  mSysWeights["leptonSF_EL_SF_Reco_DOWN"] =
+      *(Tools::Instance().GetTreeValue<float>(
+          event, "weight_leptonSF_EL_SF_Reco_DOWN"));
+  mSysWeights["leptonSF_EL_SF_ID_UP"] = *(Tools::Instance().GetTreeValue<float>(
+      event, "weight_leptonSF_EL_SF_ID_UP"));
+  mSysWeights["leptonSF_EL_SF_ID_DOWN"] =
+      *(Tools::Instance().GetTreeValue<float>(event,
+                                              "weight_leptonSF_EL_SF_ID_DOWN"));
+  mSysWeights["leptonSF_EL_SF_Isol_UP"] =
+      *(Tools::Instance().GetTreeValue<float>(event,
+                                              "weight_leptonSF_EL_SF_Isol_UP"));
+  mSysWeights["leptonSF_EL_SF_Isol_DOWN"] =
+      *(Tools::Instance().GetTreeValue<float>(
+          event, "weight_leptonSF_EL_SF_Isol_DOWN"));
+  mSysWeights["leptonSF_MU_SF_Trigger_STAT_UP"] =
+      *(Tools::Instance().GetTreeValue<float>(
+          event, "weight_leptonSF_MU_SF_Trigger_STAT_UP"));
+  mSysWeights["leptonSF_MU_SF_Trigger_STAT_DOWN"] =
+      *(Tools::Instance().GetTreeValue<float>(
+          event, "weight_leptonSF_MU_SF_Trigger_STAT_DOWN"));
+  mSysWeights["leptonSF_MU_SF_Trigger_SYST_UP"] =
+      *(Tools::Instance().GetTreeValue<float>(
+          event, "weight_leptonSF_MU_SF_Trigger_SYST_UP"));
+  mSysWeights["leptonSF_MU_SF_Trigger_SYST_DOWN"] =
+      *(Tools::Instance().GetTreeValue<float>(
+          event, "weight_leptonSF_MU_SF_Trigger_SYST_DOWN"));
+  mSysWeights["leptonSF_MU_SF_ID_STAT_UP"] =
+      *(Tools::Instance().GetTreeValue<float>(
+          event, "weight_leptonSF_MU_SF_ID_STAT_UP"));
+  mSysWeights["leptonSF_MU_SF_ID_STAT_DOWN"] =
+      *(Tools::Instance().GetTreeValue<float>(
+          event, "weight_leptonSF_MU_SF_ID_STAT_DOWN"));
+  mSysWeights["leptonSF_MU_SF_ID_SYST_UP"] =
+      *(Tools::Instance().GetTreeValue<float>(
+          event, "weight_leptonSF_MU_SF_ID_SYST_UP"));
+  mSysWeights["leptonSF_MU_SF_ID_SYST_DOWN"] =
+      *(Tools::Instance().GetTreeValue<float>(
+          event, "weight_leptonSF_MU_SF_ID_SYST_DOWN"));
+  mSysWeights["leptonSF_MU_SF_Isol_STAT_UP"] =
+      *(Tools::Instance().GetTreeValue<float>(
+          event, "weight_leptonSF_MU_SF_Isol_STAT_UP"));
+  mSysWeights["leptonSF_MU_SF_Isol_STAT_DOWN"] =
+      *(Tools::Instance().GetTreeValue<float>(
+          event, "weight_leptonSF_MU_SF_Isol_STAT_DOWN"));
+  mSysWeights["leptonSF_MU_SF_Isol_SYST_UP"] =
+      *(Tools::Instance().GetTreeValue<float>(
+          event, "weight_leptonSF_MU_SF_Isol_SYST_UP"));
+  mSysWeights["leptonSF_MU_SF_Isol_SYST_DOWN"] =
+      *(Tools::Instance().GetTreeValue<float>(
+          event, "weight_leptonSF_MU_SF_Isol_SYST_DOWN"));
+  mSysWeights["leptonSF_MU_SF_TTVA_STAT_UP"] =
+      *(Tools::Instance().GetTreeValue<float>(
+          event, "weight_leptonSF_MU_SF_TTVA_STAT_UP"));
+  mSysWeights["leptonSF_MU_SF_TTVA_STAT_DOWN"] =
+      *(Tools::Instance().GetTreeValue<float>(
+          event, "weight_leptonSF_MU_SF_TTVA_STAT_DOWN"));
+  mSysWeights["leptonSF_MU_SF_TTVA_SYST_UP"] =
+      *(Tools::Instance().GetTreeValue<float>(
+          event, "weight_leptonSF_MU_SF_TTVA_SYST_UP"));
+  mSysWeights["leptonSF_MU_SF_TTVA_SYST_DOWN"] =
+      *(Tools::Instance().GetTreeValue<float>(
+          event, "weight_leptonSF_MU_SF_TTVA_SYST_DOWN"));
+  std::vector<float> bTagSF_77_eigenvars_B_UP =
+      *(Tools::Instance().GetTreeValue<std::vector<float>>(
+          event, "weight_bTagSF_77_eigenvars_B_UP"));
+  std::vector<float> bTagSF_77_eigenvars_B_DOWN =
+      *(Tools::Instance().GetTreeValue<std::vector<float>>(
+          event, "weight_bTagSF_77_eigenvars_B_DOWN"));
+  std::vector<float> bTagSF_77_eigenvars_C_UP =
+      *(Tools::Instance().GetTreeValue<std::vector<float>>(
+          event, "weight_bTagSF_77_eigenvars_C_UP"));
+  std::vector<float> bTagSF_77_eigenvars_C_DOWN =
+      *(Tools::Instance().GetTreeValue<std::vector<float>>(
+          event, "weight_bTagSF_77_eigenvars_C_DOWN"));
+  std::vector<float> bTagSF_77_eigenvars_Light_UP =
+      *(Tools::Instance().GetTreeValue<std::vector<float>>(
+          event, "weight_bTagSF_77_eigenvars_Light_UP"));
+  std::vector<float> bTagSF_77_eigenvars_Light_DOWN =
+      *(Tools::Instance().GetTreeValue<std::vector<float>>(
+          event, "weight_bTagSF_77_eigenvars_Light_DOWN"));
+  mSysWeights["bTagSF_77_extrapolation_UP"] =
+      *(Tools::Instance().GetTreeValue<float>(
+          event, "weight_bTagSF_77_extrapolation_UP"));
+  mSysWeights["bTagSF_77_extrapolation_DOWN"] =
+      *(Tools::Instance().GetTreeValue<float>(
+          event, "weight_bTagSF_77_extrapolation_DOWN"));
+  mSysWeights["bTagSF_77_extrapolation_from_charm_UP"] =
+      *(Tools::Instance().GetTreeValue<float>(
+          event, "weight_bTagSF_77_extrapolation_from_charm_UP"));
+  mSysWeights["bTagSF_77_extrapolation_from_charm_DOWN"] =
+      *(Tools::Instance().GetTreeValue<float>(
+          event, "weight_bTagSF_77_extrapolation_from_charm_DOWN"));
+  mSysWeights["bTagSF_77_eigenvars_B1_UP"] = bTagSF_77_eigenvars_B_UP.at(0);
+  mSysWeights["bTagSF_77_eigenvars_B2_UP"] = bTagSF_77_eigenvars_B_UP.at(1);
+  mSysWeights["bTagSF_77_eigenvars_B3_UP"] = bTagSF_77_eigenvars_B_UP.at(2);
+  mSysWeights["bTagSF_77_eigenvars_B4_UP"] = bTagSF_77_eigenvars_B_UP.at(3);
+  mSysWeights["bTagSF_77_eigenvars_B5_UP"] = bTagSF_77_eigenvars_B_UP.at(4);
+  mSysWeights["bTagSF_77_eigenvars_B1_DOWN"] = bTagSF_77_eigenvars_B_DOWN.at(0);
+  mSysWeights["bTagSF_77_eigenvars_B2_DOWN"] = bTagSF_77_eigenvars_B_DOWN.at(1);
+  mSysWeights["bTagSF_77_eigenvars_B3_DOWN"] = bTagSF_77_eigenvars_B_DOWN.at(2);
+  mSysWeights["bTagSF_77_eigenvars_B4_DOWN"] = bTagSF_77_eigenvars_B_DOWN.at(3);
+  mSysWeights["bTagSF_77_eigenvars_B5_DOWN"] = bTagSF_77_eigenvars_B_DOWN.at(4);
+  mSysWeights["bTagSF_77_eigenvars_C1_UP"] = bTagSF_77_eigenvars_C_UP.at(0);
+  mSysWeights["bTagSF_77_eigenvars_C2_UP"] = bTagSF_77_eigenvars_C_UP.at(1);
+  mSysWeights["bTagSF_77_eigenvars_C3_UP"] = bTagSF_77_eigenvars_C_UP.at(2);
+  mSysWeights["bTagSF_77_eigenvars_C4_UP"] = bTagSF_77_eigenvars_C_UP.at(3);
+  mSysWeights["bTagSF_77_eigenvars_C1_DOWN"] = bTagSF_77_eigenvars_C_DOWN.at(0);
+  mSysWeights["bTagSF_77_eigenvars_C2_DOWN"] = bTagSF_77_eigenvars_C_DOWN.at(1);
+  mSysWeights["bTagSF_77_eigenvars_C3_DOWN"] = bTagSF_77_eigenvars_C_DOWN.at(2);
+  mSysWeights["bTagSF_77_eigenvars_C4_DOWN"] = bTagSF_77_eigenvars_C_DOWN.at(3);
+  mSysWeights["bTagSF_77_eigenvars_Light1_UP"] =
+      bTagSF_77_eigenvars_Light_UP.at(0);
+  mSysWeights["bTagSF_77_eigenvars_Light2_UP"] =
+      bTagSF_77_eigenvars_Light_UP.at(1);
+  mSysWeights["bTagSF_77_eigenvars_Light3_UP"] =
+      bTagSF_77_eigenvars_Light_UP.at(2);
+  mSysWeights["bTagSF_77_eigenvars_Light4_UP"] =
+      bTagSF_77_eigenvars_Light_UP.at(3);
+  mSysWeights["bTagSF_77_eigenvars_Light5_UP"] =
+      bTagSF_77_eigenvars_Light_UP.at(4);
+  mSysWeights["bTagSF_77_eigenvars_Light6_UP"] =
+      bTagSF_77_eigenvars_Light_UP.at(5);
+  mSysWeights["bTagSF_77_eigenvars_Light7_UP"] =
+      bTagSF_77_eigenvars_Light_UP.at(6);
+  mSysWeights["bTagSF_77_eigenvars_Light8_UP"] =
+      bTagSF_77_eigenvars_Light_UP.at(7);
+  mSysWeights["bTagSF_77_eigenvars_Light9_UP"] =
+      bTagSF_77_eigenvars_Light_UP.at(8);
+  mSysWeights["bTagSF_77_eigenvars_Light10_UP"] =
+      bTagSF_77_eigenvars_Light_UP.at(9);
+  mSysWeights["bTagSF_77_eigenvars_Light11_UP"] =
+      bTagSF_77_eigenvars_Light_UP.at(10);
+  mSysWeights["bTagSF_77_eigenvars_Light12_UP"] =
+      bTagSF_77_eigenvars_Light_UP.at(11);
+  mSysWeights["bTagSF_77_eigenvars_Light13_UP"] =
+      bTagSF_77_eigenvars_Light_UP.at(12);
+  mSysWeights["bTagSF_77_eigenvars_Light14_UP"] =
+      bTagSF_77_eigenvars_Light_UP.at(13);
+  mSysWeights["bTagSF_77_eigenvars_Light1_DOWN"] =
+      bTagSF_77_eigenvars_Light_DOWN.at(1);
+  mSysWeights["bTagSF_77_eigenvars_Light2_DOWN"] =
+      bTagSF_77_eigenvars_Light_DOWN.at(2);
+  mSysWeights["bTagSF_77_eigenvars_Light3_DOWN"] =
+      bTagSF_77_eigenvars_Light_DOWN.at(3);
+  mSysWeights["bTagSF_77_eigenvars_Light4_DOWN"] =
+      bTagSF_77_eigenvars_Light_DOWN.at(4);
+  mSysWeights["bTagSF_77_eigenvars_Light5_DOWN"] =
+      bTagSF_77_eigenvars_Light_DOWN.at(5);
+  mSysWeights["bTagSF_77_eigenvars_Light6_DOWN"] =
+      bTagSF_77_eigenvars_Light_DOWN.at(6);
+  mSysWeights["bTagSF_77_eigenvars_Light7_DOWN"] =
+      bTagSF_77_eigenvars_Light_DOWN.at(7);
+  mSysWeights["bTagSF_77_eigenvars_Light8_DOWN"] =
+      bTagSF_77_eigenvars_Light_DOWN.at(8);
+  mSysWeights["bTagSF_77_eigenvars_Light9_DOWN"] =
+      bTagSF_77_eigenvars_Light_DOWN.at(9);
+  mSysWeights["bTagSF_77_eigenvars_Light10_DOWN"] =
+      bTagSF_77_eigenvars_Light_DOWN.at(10);
+  mSysWeights["bTagSF_77_eigenvars_Light11_DOWN"] =
+      bTagSF_77_eigenvars_Light_DOWN.at(11);
+  mSysWeights["bTagSF_77_eigenvars_Light12_DOWN"] =
+      bTagSF_77_eigenvars_Light_DOWN.at(12);
+  mSysWeights["bTagSF_77_eigenvars_Light13_DOWN"] =
+      bTagSF_77_eigenvars_Light_DOWN.at(13);
+  mSysWeights["bTagSF_77_eigenvars_Light14_DOWN"] =
+      bTagSF_77_eigenvars_Light_DOWN.at(14);
+  return mSysWeights;
+}

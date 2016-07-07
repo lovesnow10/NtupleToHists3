@@ -52,28 +52,29 @@ bool MakeHists::run(TTree *event, map<string, float> weights,
   bool doTTbarMerge = bControl.at("doTTbarMerge");
   bool doSysmetic = bControl.at("doSysmetic");
 
+  mSysName.push_back("nominal");
   mSysWeights["nominal"] = 1.0;
 
-  if (doSysmetic) {
+  if (doSysmetic && isNominal) {
     for (auto w : weights) {
       if (w.first == "norm" || w.first == "weight_NNLO" ||
-          w.first == "weight_ttbb_Nominal")
+          w.first == "ttbb_Nominal_weight")
         continue;
       string tmpName = w.first.substr(0, w.first.find("_weight"));
       mSysWeights[tmpName] = w.second;
     }
 
-    for (auto w : mSysName) {
-      string tmpName = string("weight_") + w;
-      float tmpWeight =
-          *(Tools::Instance().GetTreeValue<float>(mEvent, tmpName));
-      mSysWeights[w] = tmpWeight;
+    std::map<string, float> tmpSysWeights = GetSysWeights(mEvent);
+    for (auto tw : tmpSysWeights) {
+      mSysWeights[tw.first] = tw.second;
     }
   }
 
-  for (auto w : mSysWeights) {
-    if (!isNominal && w.first != "nominal")
+  for (auto w : mSysName) {
+    if (!isNominal && w != "nominal")
       continue;
+
+    float weight = mSysWeights.at(w);
 
     int mcChannel =
         *(Tools::Instance().GetTreeValue<int>(mEvent, "mcChannelNumber"));
@@ -83,7 +84,7 @@ bool MakeHists::run(TTree *event, map<string, float> weights,
     // Fakes!
     // bool isFake = false;
     mSample = Tools::Instance().GetSampleType(mcChannel);
-    if (mSample == "DATA" && w.first != "nominal")
+    if (mSample == "DATA" && w != "nominal")
       continue;
 
     // Get Weights!
@@ -94,8 +95,7 @@ bool MakeHists::run(TTree *event, map<string, float> weights,
       if (mSample == "ttbar") {
         mSample = doHeavyFlavor(mEvent);
       }
-      if (mSample == "ttbb" &&
-          (w.first == "NNLO_topPtUp" || w.first == "NNLO_ttbarPtUP"))
+      if (mSample == "ttbb" && (w == "NNLO_topPtUp" || w == "NNLO_ttbarPtUP"))
         continue;
 
       float weight_mc =
@@ -108,26 +108,40 @@ bool MakeHists::run(TTree *event, map<string, float> weights,
           *(Tools::Instance().GetTreeValue<float>(mEvent, "weight_leptonSF"));
       float weight_bTagSF_77 =
           *(Tools::Instance().GetTreeValue<float>(mEvent, "weight_bTagSF_77"));
+      if (w.find("leptonSF") != string::npos)
+        mWeights = weight_mc * weight_pileup * weight_bTagSF_77 * weight_jvt;
+      else if (w.find("bTagSF_77") != string::npos)
+        mWeights = weight_mc * weight_pileup * weight_leptonSF * weight_jvt;
+      else if (w.find("pileup") != string::npos)
+        mWeights = weight_mc * weight_bTagSF_77 * weight_leptonSF * weight_jvt;
+      else if (w.find("jvt") != string::npos)
+        mWeights =
+            weight_mc * weight_pileup * weight_leptonSF * weight_bTagSF_77;
+      else
+        mWeights = weight_mc * weight_bTagSF_77 * weight_leptonSF * weight_jvt *
+                   weight_pileup;
       if (mSample != "ttbb") {
-        if (!isTRF)
-          mWeights = mWeights * weight_mc * weight_pileup * weight_jvt *
-                     weight_leptonSF * weight_bTagSF_77 *
-                     weights["ttbb_Nominal_weight"] * weights["weight_NNLO"];
-        else
-          mWeights = mWeights * weight_mc * weight_pileup * weight_jvt *
-                     weight_leptonSF * weights["ttbb_Nominal_weight"] *
-                     weights["weight_NNLO"];
+        if (!isTRF) {
+          if (w.find("ttbb") != string::npos)
+            mWeights = mWeights * weights["weight_NNLO"];
+          else if (w.find("NNLO") != string::npos)
+            mWeights = mWeights * weights["ttbb_Nominal_weight"];
+          else
+            mWeights = mWeights * weights["ttbb_Nominal_weight"] *
+                       weights["weight_NNLO"];
+        } else
+          mWeights = mWeights * weights["ttbb_Nominal_weight"] *
+                     weights["weight_NNLO"] / weight_bTagSF_77;
       } else {
-        if (!isTRF)
-          mWeights = mWeights * weight_mc * weight_pileup * weight_jvt *
-                     weight_leptonSF * weight_bTagSF_77 *
-                     weights["ttbb_Nominal_weight"];
-        else
-          mWeights = mWeights * weight_mc * weight_pileup * weight_jvt *
-                     weight_leptonSF * weights["ttbb_Nominal_weight"];
+        if (!isTRF) {
+          if (w.find("ttbb") == string::npos)
+            mWeights = mWeights * weights["ttbb_Nominal_weight"];
+        } else
+          mWeights =
+              mWeights * weights["ttbb_Nominal_weight"] / weight_bTagSF_77;
       }
       // Syst weight
-      mWeights *= w.second;
+      mWeights *= weight;
     }
 
     // Selectioins!
@@ -224,7 +238,7 @@ bool MakeHists::run(TTree *event, map<string, float> weights,
         }
         string SysName;
         if (isNominal)
-          SysName = w.first;
+          SysName = w;
         else
           SysName = tmpTreeName;
         string hname = Tools::Instance().GenName(var, region, mSample, SysName);
