@@ -113,7 +113,7 @@ std::map<string, float> GetSysWeights(TTree *event) {
   mSysWeights["pileup_UP"] =
       *(Tools::Instance().GetTreeValue<float>(event, "weight_pileup_UP"));
   mSysWeights["pileup_DOWN"] =
-      *(Tools::Instance().GetTreeValue<float>(event, "wegiht_pileup_DOWN"));
+      *(Tools::Instance().GetTreeValue<float>(event, "weight_pileup_DOWN"));
   mSysWeights["jvt_UP"] =
       *(Tools::Instance().GetTreeValue<float>(event, "weight_jvt_UP"));
   mSysWeights["jvt_DOWN"] =
