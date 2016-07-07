@@ -191,34 +191,34 @@ std::map<string, float> GetSysWeights(TTree *event) {
           event, "weight_leptonSF_MU_SF_TTVA_SYST_DOWN"));
   std::vector<float> bTagSF_77_eigenvars_B_UP =
       *(Tools::Instance().GetTreeValue<std::vector<float>>(
-          event, "weight_bTagSF_77_eigenvars_B_UP"));
+          event, "weight_bTagSF_77_eigenvars_B_up"));
   std::vector<float> bTagSF_77_eigenvars_B_DOWN =
       *(Tools::Instance().GetTreeValue<std::vector<float>>(
-          event, "weight_bTagSF_77_eigenvars_B_DOWN"));
+          event, "weight_bTagSF_77_eigenvars_B_down"));
   std::vector<float> bTagSF_77_eigenvars_C_UP =
       *(Tools::Instance().GetTreeValue<std::vector<float>>(
-          event, "weight_bTagSF_77_eigenvars_C_UP"));
+          event, "weight_bTagSF_77_eigenvars_C_up"));
   std::vector<float> bTagSF_77_eigenvars_C_DOWN =
       *(Tools::Instance().GetTreeValue<std::vector<float>>(
-          event, "weight_bTagSF_77_eigenvars_C_DOWN"));
+          event, "weight_bTagSF_77_eigenvars_C_down"));
   std::vector<float> bTagSF_77_eigenvars_Light_UP =
       *(Tools::Instance().GetTreeValue<std::vector<float>>(
-          event, "weight_bTagSF_77_eigenvars_Light_UP"));
+          event, "weight_bTagSF_77_eigenvars_Light_up"));
   std::vector<float> bTagSF_77_eigenvars_Light_DOWN =
       *(Tools::Instance().GetTreeValue<std::vector<float>>(
-          event, "weight_bTagSF_77_eigenvars_Light_DOWN"));
+          event, "weight_bTagSF_77_eigenvars_Light_down"));
   mSysWeights["bTagSF_77_extrapolation_UP"] =
       *(Tools::Instance().GetTreeValue<float>(
-          event, "weight_bTagSF_77_extrapolation_UP"));
+          event, "weight_bTagSF_77_extrapolation_up"));
   mSysWeights["bTagSF_77_extrapolation_DOWN"] =
       *(Tools::Instance().GetTreeValue<float>(
-          event, "weight_bTagSF_77_extrapolation_DOWN"));
+          event, "weight_bTagSF_77_extrapolation_down"));
   mSysWeights["bTagSF_77_extrapolation_from_charm_UP"] =
       *(Tools::Instance().GetTreeValue<float>(
-          event, "weight_bTagSF_77_extrapolation_from_charm_UP"));
+          event, "weight_bTagSF_77_extrapolation_from_charm_up"));
   mSysWeights["bTagSF_77_extrapolation_from_charm_DOWN"] =
       *(Tools::Instance().GetTreeValue<float>(
-          event, "weight_bTagSF_77_extrapolation_from_charm_DOWN"));
+          event, "weight_bTagSF_77_extrapolation_from_charm_down"));
   mSysWeights["bTagSF_77_eigenvars_B1_UP"] = bTagSF_77_eigenvars_B_UP.at(0);
   mSysWeights["bTagSF_77_eigenvars_B2_UP"] = bTagSF_77_eigenvars_B_UP.at(1);
   mSysWeights["bTagSF_77_eigenvars_B3_UP"] = bTagSF_77_eigenvars_B_UP.at(2);
