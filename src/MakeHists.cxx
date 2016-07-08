@@ -32,6 +32,7 @@ bool MakeHists::initialize(ConfigParser *config, DSHandler *ds) {
   mSysName.clear();
   if (config->HasCommonSetting("TreeSysName"))
     mSysName = config->GetCommonSetting("TreeSysName");
+  mSysName.push_back("nominal");
   return true;
 }
 
@@ -52,7 +53,6 @@ bool MakeHists::run(TTree *event, map<string, float> weights,
   bool doTTbarMerge = bControl.at("doTTbarMerge");
   bool doSysmetic = bControl.at("doSysmetic");
 
-  mSysName.push_back("nominal");
   calculator->CalculateVariables(mEvent);
   int mcChannel =
       *(Tools::Instance().GetTreeValue<int>(mEvent, "mcChannelNumber"));
