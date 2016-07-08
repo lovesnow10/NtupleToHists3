@@ -92,9 +92,13 @@ bool MakeHists::run(TTree *event, map<string, float> weights,
     weight_bTagSF_77 =
         *(Tools::Instance().GetTreeValue<float>(mEvent, "weight_bTagSF_77"));
 
-    mWeights = weight_mc * weight_bTagSF_77 * weight_leptonSF * weight_jvt *
+    if (mSample == "ttlight" || mSample == "ttcc" || mSample == "ttbb")
+    mWeights = mWeights * weight_mc * weight_bTagSF_77 * weight_leptonSF * weight_jvt *
                weight_pileup * weights["ttbb_Nominal_weight"] *
                weights["weight_NNLO"];
+    else
+    mWeights = mWeights * weight_mc * weight_bTagSF_77 * weight_leptonSF * weight_jvt *
+               weight_pileup;
   }
 
   for (auto w : mSysName) {
@@ -111,7 +115,7 @@ bool MakeHists::run(TTree *event, map<string, float> weights,
     mSample = Tools::Instance().GetSampleType(mcChannel);
     if (mSample == "DATA" && w != "nominal")
       continue;
-    if ((mSample == "ttbb" || mSample == "ttcc" || mSample == "ttlight") &&
+    if ((mSample != "ttbb" && mSample != "ttcc" && mSample != "ttlight") &&
         (w.find("ttbb") != string::npos || w.find("NNLO") != string::npos))
       continue;
 
