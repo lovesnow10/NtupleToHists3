@@ -53,9 +53,9 @@ bool MakeHists::run(TTree *event, map<string, float> weights,
   bool doSysmetic = bControl.at("doSysmetic");
 
   mSysName.push_back("nominal");
-  mSysWeights["nominal"] = 1.0;
 
   if (doSysmetic && isNominal) {
+    GetSysWeights(mEvent, mSysWeights);
     for (auto w : weights) {
       if (w.first == "norm" || w.first == "weight_NNLO" ||
           w.first == "ttbb_Nominal_weight")
@@ -63,12 +63,8 @@ bool MakeHists::run(TTree *event, map<string, float> weights,
       string tmpName = w.first.substr(0, w.first.find("_weight"));
       mSysWeights[tmpName] = w.second;
     }
-
-    std::map<string, float> tmpSysWeights = GetSysWeights(mEvent);
-    for (auto tw : tmpSysWeights) {
-      mSysWeights[tw.first] = tw.second;
-    }
   }
+  mSysWeights["nominal"] = 1.0;
 
   for (auto w : mSysName) {
     if (!isNominal && w != "nominal")

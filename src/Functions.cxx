@@ -108,8 +108,8 @@ string doHeavyFlavor(TTree *event) {
     return "ttbb";
 }
 
-std::map<string, float> GetSysWeights(TTree *event) {
-  std::map<string, float> mSysWeights;
+void GetSysWeights(TTree *event, std::map<string, float> &mSysWeights) {
+  mSysWeights.clear();
   mSysWeights["pileup_UP"] =
       *(Tools::Instance().GetTreeValue<float>(event, "weight_pileup_UP"));
   mSysWeights["pileup_DOWN"] =
@@ -293,5 +293,4 @@ std::map<string, float> GetSysWeights(TTree *event) {
       bTagSF_77_eigenvars_Light_DOWN.at(12);
   mSysWeights["bTagSF_77_eigenvars_Light14_DOWN"] =
       bTagSF_77_eigenvars_Light_DOWN.at(13);
-  return mSysWeights;
 }

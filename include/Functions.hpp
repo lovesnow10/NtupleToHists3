@@ -12,6 +12,6 @@ using namespace std;
 bool isFake(TTree* event);
 bool doTTbarCombination(TTree* event);
 string doHeavyFlavor(TTree* event);
-std::map<string, float> GetSysWeights(TTree* event);
+void GetSysWeights(TTree* event, std::map<string, float> &mSysWeights);
 
 #endif
