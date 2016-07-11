@@ -56,7 +56,7 @@ bool MakeHists::run(TTree *event, map<string, float> weights,
   calculator->CalculateVariables(mEvent);
   int mcChannel =
       *(Tools::Instance().GetTreeValue<int>(mEvent, "mcChannelNumber"));
-
+  mSample = Tools::Instance().GetSampleType(mcChannel);
   if (doSysmetic && isNominal) {
     GetSysWeights(mEvent, mSysWeights);
     for (auto w : weights) {
@@ -70,7 +70,7 @@ bool MakeHists::run(TTree *event, map<string, float> weights,
   mSysWeights["nominal"] = 1.0;
 
   // Get Weights!
-  float mWeights = Tools::Instance().GetWeight(mcChannel);
+  float tmpWeights = Tools::Instance().GetWeight(mcChannel);
   float weight_mc = 1.0;
   float weight_pileup = 1.0;
   float weight_jvt = 1.0;
@@ -93,11 +93,11 @@ bool MakeHists::run(TTree *event, map<string, float> weights,
         *(Tools::Instance().GetTreeValue<float>(mEvent, "weight_bTagSF_77"));
 
     if (mSample == "ttlight" || mSample == "ttcc" || mSample == "ttbb")
-    mWeights = mWeights * weight_mc * weight_bTagSF_77 * weight_leptonSF * weight_jvt *
+    tmpWeights = tmpWeights * weight_mc * weight_bTagSF_77 * weight_leptonSF * weight_jvt *
                weight_pileup * weights["ttbb_Nominal_weight"] *
                weights["weight_NNLO"];
     else
-    mWeights = mWeights * weight_mc * weight_bTagSF_77 * weight_leptonSF * weight_jvt *
+    tmpWeights = tmpWeights * weight_mc * weight_bTagSF_77 * weight_leptonSF * weight_jvt *
                weight_pileup;
   }
 
@@ -106,13 +106,13 @@ bool MakeHists::run(TTree *event, map<string, float> weights,
       continue;
 
     float weight = mSysWeights.at(w);
+    float mWeights = tmpWeights;
 
     if (mcChannel == 0)
       isTRF = false;
 
     // Fakes!
     // bool isFake = false;
-    mSample = Tools::Instance().GetSampleType(mcChannel);
     if (mSample == "DATA" && w != "nominal")
       continue;
     if ((mSample != "ttbb" && mSample != "ttcc" && mSample != "ttlight") &&

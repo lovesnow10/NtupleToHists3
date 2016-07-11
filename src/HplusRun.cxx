@@ -193,7 +193,7 @@ bool HplusRun::run() {
         weights["weight_NNLO_topPtUp"] = weight_NNLO_topPtUp;
         weights["weight_NNLO_ttbarPtUP"] = weight_NNLO_ttbarPtUp;
 
-        mMH->run(mWorker, weights, mFormulas, bControl);
+        if (mMH->run(mWorker, weights, mFormulas, bControl))
         //      mPI->run(mWorker, weights, ientry);
         mProcessed++;
       }
