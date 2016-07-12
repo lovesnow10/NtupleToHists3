@@ -93,12 +93,12 @@ bool MakeHists::run(TTree *event, map<string, float> weights,
         *(Tools::Instance().GetTreeValue<float>(mEvent, "weight_bTagSF_77"));
 
     if (mSample == "ttlight" || mSample == "ttcc" || mSample == "ttbb")
-    tmpWeights = tmpWeights * weight_mc * weight_bTagSF_77 * weight_leptonSF * weight_jvt *
-               weight_pileup * weights["ttbb_Nominal_weight"] *
-               weights["weight_NNLO"];
+      tmpWeights = tmpWeights * weight_mc * weight_bTagSF_77 * weight_leptonSF *
+                   weight_jvt * weight_pileup * weights["ttbb_Nominal_weight"] *
+                   weights["weight_NNLO"];
     else
-    tmpWeights = tmpWeights * weight_mc * weight_bTagSF_77 * weight_leptonSF * weight_jvt *
-               weight_pileup;
+      tmpWeights = tmpWeights * weight_mc * weight_bTagSF_77 * weight_leptonSF *
+                   weight_jvt * weight_pileup;
   }
 
   for (auto w : mSysName) {
@@ -169,12 +169,14 @@ bool MakeHists::run(TTree *event, map<string, float> weights,
       mTRFweights["3bin"] = tmpTRFweights[3];
     }
     // Fake leptons removal
-    if (doTTbarMerge) {
-      if (!doTTbarCombination(mEvent))
-        return false;
+    if (mcChannel != 0) {
+      if (doTTbarMerge) {
+        if (!doTTbarCombination(mEvent))
+          return false;
+      }
+      if (isFake(mEvent))
+        mSample = "Fakes";
     }
-    if (isFake(mEvent))
-      mSample = "Fakes";
     // Calculate Variables
     // calculator->CalculateVariables(mEvent);
     for (auto region : mRegions) {
@@ -269,8 +271,6 @@ void MakeHists::InitYields(DSHandler *ds) {
   int nRegions = regions.size();
   if (!(find(samples.begin(), samples.end(), "ttbar") == samples.end())) {
     nSamples += 2;
-  } else if (mConfig->GetCommonSetting("DataSplit")[0] == "1") {
-    nSamples += 1;
   }
   hs->AddHist2D("hist_raw_yields", nSamples, 0, nSamples, nRegions, 0,
                 nRegions);
@@ -288,14 +288,6 @@ void MakeHists::InitYields(DSHandler *ds) {
         mRawYields[region]["ttbb"] = 0;
         mWeightedYields[region]["ttbb"] = 0;
         mWeightedYieldsError[region]["ttbb"] = 0;
-      } else if (sample == "DATA" &&
-                 mConfig->GetCommonSetting("DataSplit")[0] == "1") {
-        mRawYields[region]["DATA15"] = 0;
-        mRawYields[region]["DATA16"] = 0;
-        mWeightedYieldsError[region]["DATA15"] = 0;
-        mWeightedYields[region]["DATA15"] = 0;
-        mWeightedYields[region]["DATA16"] = 0;
-        mWeightedYieldsError[region]["DATA16"] = 0;
       } else {
         mRawYields[region][sample] = 0;
         mWeightedYields[region][sample] = 0;
