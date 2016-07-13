@@ -94,7 +94,7 @@ bool doTTbarCombination(TTree *event) {
     return false;
   if (mcChannel == 410009 && TopHeavyFlavorFilterFlag == 5)
     return false;
-  return false;
+  return true;
 }
 
 string doHeavyFlavor(TTree *event) {
