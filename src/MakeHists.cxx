@@ -60,53 +60,61 @@ bool MakeHists::run(TTree *event, map<string, float> weights,
   if (doSysmetic && isNominal) {
     GetSysWeights(mEvent, mSysWeights);
     for (auto w : weights) {
-      if (w.first == "norm" || w.first == "weight_NNLO" ||
-          w.first == "ttbb_Nominal_weight")
+      if (w.first == "norm" || w.first == "weight_NNLO")
         continue;
-      string tmpName = w.first.substr(0, w.first.find("_weight"));
+      string tmpName = w.first.substr(7);
       mSysWeights[tmpName] = w.second;
     }
   }
   mSysWeights["nominal"] = 1.0;
 
   // Get Weights!
-  float tmpWeights = Tools::Instance().GetWeight(mcChannel);
+  // float tmpWeights = Tools::Instance().GetWeight(mcChannel);
   float weight_mc = 1.0;
   float weight_pileup = 1.0;
   float weight_jvt = 1.0;
   float weight_leptonSF = 1.0;
-  float weight_bTagSF_77 = 1.0;
+  float weight_bTagSF_70 = 1.0;
+  float weight_ttbb_Nominal = 1.0;
 
   // No weight for DATA!
   if (mcChannel != 0) {
     if (mSample == "ttbar") {
       mSample = doHeavyFlavor(mEvent);
     }
-
-    weight_mc = *(Tools::Instance().GetTreeValue<float>(mEvent, "weight_mc"));
-    weight_pileup =
-        *(Tools::Instance().GetTreeValue<float>(mEvent, "weight_pileup"));
-    weight_jvt = *(Tools::Instance().GetTreeValue<float>(mEvent, "weight_jvt"));
-    weight_leptonSF =
-        *(Tools::Instance().GetTreeValue<float>(mEvent, "weight_leptonSF"));
-    weight_bTagSF_77 =
-        *(Tools::Instance().GetTreeValue<float>(mEvent, "weight_bTagSF_77"));
-
-    if (mSample == "ttlight" || mSample == "ttcc" || mSample == "ttbb")
-      tmpWeights = tmpWeights * weight_mc * weight_bTagSF_77 * weight_leptonSF *
-                   weight_jvt * weight_pileup * weights["ttbb_Nominal_weight"] *
-                   weights["weight_NNLO"];
-    else
-      tmpWeights = tmpWeights * weight_mc * weight_bTagSF_77 * weight_leptonSF *
-                   weight_jvt * weight_pileup;
+    // Fake leptons removal
+    if (doTTbarMerge) {
+      if (!doTTbarCombination(mEvent))
+        return false;
+    }
+    if (isFake(mEvent))
+      mSample = "Fakes";
   }
+
+  /*weight_mc = *(Tools::Instance().GetTreeValue<float>(mEvent, "weight_mc"));
+  weight_pileup =
+      *(Tools::Instance().GetTreeValue<float>(mEvent, "weight_pileup"));
+  weight_jvt = *(Tools::Instance().GetTreeValue<float>(mEvent, "weight_jvt"));
+  weight_leptonSF =
+      *(Tools::Instance().GetTreeValue<float>(mEvent, "weight_leptonSF"));
+  weight_bTagSF_77 =
+      *(Tools::Instance().GetTreeValue<float>(mEvent, "weight_bTagSF_77"));
+
+  if (mSample == "ttlight" || mSample == "ttcc" || mSample == "ttbb")
+    tmpWeights = tmpWeights * weight_mc * weight_bTagSF_77 * weight_leptonSF *
+                 weight_jvt * weight_pileup * weights["ttbb_Nominal_weight"] *
+                 weights["weight_NNLO"];
+  else
+    tmpWeights = tmpWeights * weight_mc * weight_bTagSF_77 * weight_leptonSF *
+                 weight_jvt * weight_pileup;
+}*/
 
   for (auto w : mSysName) {
     if (!isNominal && w != "nominal")
       continue;
 
     float weight = mSysWeights.at(w);
-    float mWeights = tmpWeights;
+    float mWeights = Tools::Instance().GetWeight(mcChannel);
 
     if (mcChannel == 0)
       isTRF = false;
@@ -124,23 +132,65 @@ bool MakeHists::run(TTree *event, map<string, float> weights,
       if (mSample == "ttbb" && (w == "NNLO_topPtUp" || w == "NNLO_ttbarPtUP"))
         continue;
 
-      if (w.find("leptonSF") != string::npos)
-        mWeights = mWeights * weight / weight_leptonSF;
-      else if (w.find("bTagSF_77") != string::npos)
-        mWeights = mWeights * weight / weight_bTagSF_77;
-      else if (w.find("pileup") != string::npos)
-        mWeights = mWeights * weight / weight_pileup;
-      else if (w.find("jvt") != string::npos)
-        mWeights = mWeights * weight / weight_jvt;
+      weight_mc = *(Tools::Instance().GetTreeValue<float>(mEvent, "weight_mc"));
+      weight_pileup =
+          *(Tools::Instance().GetTreeValue<float>(mEvent, "weight_pileup"));
+      weight_jvt =
+          *(Tools::Instance().GetTreeValue<float>(mEvent, "weight_jvt"));
+      weight_leptonSF =
+          *(Tools::Instance().GetTreeValue<float>(mEvent, "weight_leptonSF"));
+      weight_bTagSF_70 =
+          *(Tools::Instance().GetTreeValue<float>(mEvent, "weight_bTagSF_70"));
+      weight_ttbb_Nominal = *(
+          Tools::Instance().GetTreeValue<float>(mEvent, "weight_ttbb_Nominal"));
 
-      if (mSample == "ttlight" || mSample == "ttcc") {
-        if (w.find("ttbb") != string::npos)
-          mWeights = mWeights * weight / weights["ttbb_Nominal_weight"];
-        else if (w.find("NNLO") != string::npos)
-          mWeights = mWeights * weight / weights["weight_NNLO"];
-      } else if (mSample == "ttbb") {
-        if (w.find("ttbb") != string::npos)
-          mWeights = mWeights * weight / weights["ttbb_Nominal_weight"];
+      if (mSample != "ttbb") {
+        if (w.find("leptonSF_") != string::npos)
+          mWeights = mWeights * weight * weight_mc * weight_pileup *
+                     weight_jvt * weight_bTagSF_70 * weight_ttbb_Nominal *
+                     weights["weight_NNLO"];
+        else if (w.find("bTagSF_70_") != string::npos)
+          mWeights = mWeights * weight * weight_mc * weight_pileup *
+                     weight_jvt * weight_leptonSF * weight_ttbb_Nominal *
+                     weights["weight_NNLO"];
+        else if (w.find("pileup_") != string::npos)
+          mWeights = mWeights * weight * weight_mc * weight_jvt *
+                     weight_leptonSF * weight_bTagSF_70 * weight_ttbb_Nominal *
+                     weights["weight_NNLO"];
+        else if (w.find("jvt_") != string::npos)
+          mWeights = mWeights * weight * weight_mc * weight_pileup *
+                     weight_leptonSF * weight_bTagSF_70 * weight_ttbb_Nominal *
+                     weights["weight_NNLO"];
+        else if (w.find("ttbb_") != string::npos)
+          mWeights = mWeights * weight * weight_mc * weight_pileup *
+                     weight_leptonSF * weight_bTagSF_70 *
+                     weights["weight_NNLO"];
+        else if (w.find("NNLO_") != string::npos)
+          mWeights = mWeights * weight * weight_mc * weight_pileup *
+                     weight_leptonSF * weight_bTagSF_70 * weight_ttbb_Nominal;
+        else
+          mWeights = mWeights * weight_mc * weight_pileup * weight_jvt *
+                     weight_leptonSF * weight_bTagSF_70 * weight_ttbb_Nominal *
+                     weights["weight_NNLO"];
+      } else {
+        if (w.find("leptonSF_") != string::npos)
+          mWeights = mWeights * weight * weight_mc * weight_pileup *
+                     weight_jvt * weight_bTagSF_70 * weight_ttbb_Nominal;
+        else if (w.find("bTagSF_70_") != string::npos)
+          mWeights = mWeights * weight * weight_mc * weight_pileup *
+                     weight_jvt * weight_leptonSF * weight_ttbb_Nominal;
+        else if (w.find("pileup_") != string::npos)
+          mWeights = mWeights * weight * weight_mc * weight_jvt *
+                     weight_leptonSF * weight_bTagSF_70 * weight_ttbb_Nominal;
+        else if (w.find("jvt_") != string::npos)
+          mWeights = mWeights * weight * weight_mc * weight_pileup *
+                     weight_leptonSF * weight_bTagSF_70 * weight_ttbb_Nominal;
+        else if (w.find("ttbb_") != string::npos)
+          mWeights = mWeights * weight * weight_mc * weight_pileup *
+                     weight_leptonSF * weight_bTagSF_70;
+        else
+          mWeights = mWeights * weight_mc * weight_pileup * weight_jvt *
+                     weight_leptonSF * weight_bTagSF_70 * weight_ttbb_Nominal;
       }
     }
 
@@ -152,7 +202,8 @@ bool MakeHists::run(TTree *event, map<string, float> weights,
       }
     }
     if (mRegions.empty())
-      return false;
+      // return false;
+      continue;
 
     std::map<string, float> mTRFweights;
     if (isTRF) {
@@ -168,15 +219,7 @@ bool MakeHists::run(TTree *event, map<string, float> weights,
       mTRFweights["2bin"] = tmpTRFweights[2];
       mTRFweights["3bin"] = tmpTRFweights[3];
     }
-    // Fake leptons removal
-    if (mcChannel != 0) {
-      if (doTTbarMerge) {
-        if (!doTTbarCombination(mEvent))
-          return false;
-      }
-      if (isFake(mEvent))
-        mSample = "Fakes";
-    }
+
     // Calculate Variables
     // calculator->CalculateVariables(mEvent);
     for (auto region : mRegions) {

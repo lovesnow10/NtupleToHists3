@@ -10,6 +10,7 @@ float VariableCalculator::GetVarValue(string VarName) {
 
 void VariableCalculator::CalculateVariables(TTree *event) {
   mEvent = event;
+  mVariablesMap.clear();
   std::vector<float> jet_pt =
       *(Tools::Instance().GetTreeValue<std::vector<float>>(mEvent, "jet_pt"));
   std::vector<float> jet_eta =

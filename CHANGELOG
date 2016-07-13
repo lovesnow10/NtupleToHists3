@@ -1,0 +1,6 @@
+2016.07.12 17:57
+Create CHANGLOG! Cheers!
+
+2016.07.12 17:57
+1. Change to use ttbb weights saved in Ntuples, expect to make the program faster.
+2. Calculate total weights inside the sys-loop, DO NOT skip zero weight events any more.

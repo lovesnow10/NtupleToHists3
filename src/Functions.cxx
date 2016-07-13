@@ -110,6 +110,18 @@ string doHeavyFlavor(TTree *event) {
 
 void GetSysWeights(TTree *event, std::map<string, float> &mSysWeights) {
   mSysWeights.clear();
+  mSysWeights["ttbb_CSS_KIN"] = *(Tools::Instance().GetTreeValue<float>(event, "weight_ttbb_CSS_KIN"));
+  mSysWeights["ttbb_NNPDF"] = *(Tools::Instance().GetTreeValue<float>(event, "weight_ttbb_NNPDF"));
+  mSysWeights["ttbb_MSTW"] = *(Tools::Instance().GetTreeValue<float>(event, "weight_ttbb_MSTW"));
+  mSysWeights["ttbb_Q_CMMPS"] = *(Tools::Instance().GetTreeValue<float>(event, "weight_ttbb_Q_CMMPS"));
+  mSysWeights["ttbb_glosoft"] = *(Tools::Instance().GetTreeValue<float>(event, "weight_ttbb_glosoft"));
+  mSysWeights["ttbb_defaultX05"] = *(Tools::Instance().GetTreeValue<float>(event, "weight_ttbb_defaultX05"));
+  mSysWeights["ttbb_defaultX2"] = *(Tools::Instance().GetTreeValue<float>(event, "weight_ttbb_defaultX2"));
+  mSysWeights["ttbb_MPI_UP"] = *(Tools::Instance().GetTreeValue<float>(event, "weight_ttbb_MPIup"));
+  mSysWeights["ttbb_MPI_DOWN"] = *(Tools::Instance().GetTreeValue<float>(event, "weight_ttbb_MPIdown"));
+  mSysWeights["ttbb_MPIfactor"] = *(Tools::Instance().GetTreeValue<float>(event, "weight_ttbb_MPIfactor"));
+  mSysWeights["ttbb_aMcAtNloHpp"] = *(Tools::Instance().GetTreeValue<float>(event, "weight_ttbb_aMcAtNloHpp"));
+  mSysWeights["ttbb_aMcAtNloPy8"] = *(Tools::Instance().GetTreeValue<float>(event, "weight_ttbb_aMcAtNloPy8"));
   mSysWeights["pileup_UP"] =
       *(Tools::Instance().GetTreeValue<float>(event, "weight_pileup_UP"));
   mSysWeights["pileup_DOWN"] =

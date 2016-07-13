@@ -109,7 +109,7 @@ bool HplusRun::run() {
       int mcChannel =
           *(Tools::Instance().GetTreeValue<int>(mWorker, "mcChannelNumber"));
       // Calculate norm and init ttbbRW
-      ttbbNLO_syst *ttbbRW;
+      //ttbbNLO_syst *ttbbRW;
       NNLOReweighter *nnloRW;
       float norm = 1.0;
       if (mcChannel != 0) {
@@ -119,16 +119,16 @@ bool HplusRun::run() {
         float lumi = atof((mConfig->GetCommonSetting("Luminosity")[0]).c_str());
         norm = xs * lumi / totalEventsWeighted;
 
-        string NormFile = mConfig->GetCommonSetting("NormFile")[0];
-        string ShapeFile = mConfig->GetCommonSetting("ShapeFile")[0];
+        //string NormFile = mConfig->GetCommonSetting("NormFile")[0];
+        //string ShapeFile = mConfig->GetCommonSetting("ShapeFile")[0];
         string NNLODir = mConfig->GetCommonSetting("NNLODir")[0];
-        if (mcChannel == 410000 || mcChannel == 410009 || mcChannel == 410120 ||
+        /*if (mcChannel == 410000 || mcChannel == 410009 || mcChannel == 410120 ||
             mcChannel == 410121) {
           ttbbRW = new ttbbNLO_syst("410000", NormFile, ShapeFile);
         } else {
           ttbbRW = new ttbbNLO_syst(to_string(mcChannel), NormFile, ShapeFile);
         }
-        ttbbRW->Init();
+        ttbbRW->Init();*/
         if (mcChannel == 410000 || mcChannel == 410009 || mcChannel == 410120 ||
             mcChannel == 410121) {
           nnloRW = new NNLOReweighter(mcChannel, NNLODir);
@@ -156,7 +156,7 @@ bool HplusRun::run() {
         float weight_NNLO_ttbarPtUp = 1.0;
         std::map<string, float> weights;
         if (mcChannel != 0) {
-          HFSystDataMembers *ttbb = new HFSystDataMembers();
+          /*HFSystDataMembers *ttbb = new HFSystDataMembers();
           ttbb->HF_Classification = *(Tools::Instance().GetTreeValue<int>(
               mWorker, "HF_Classification"));
           ttbb->q1_eta =
@@ -174,7 +174,7 @@ bool HplusRun::run() {
                                mWorker, "truth_ttbar_pt")) *
                            1e-3;
 
-          weights = ttbbRW->GetttHFWeights(ttbb);
+          weights = ttbbRW->GetttHFWeights(ttbb);*/
 
           if (mcChannel == 410000 || mcChannel == 410009 ||
               mcChannel == 410120 || mcChannel == 410121) {
