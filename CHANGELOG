@@ -1,9 +1,13 @@
 2016.07.12 17:57
 Create CHANGLOG! Cheers!
 
-2016.07.12 17:57 (Grenoble)
+2016.07.12 17:57 (Grenoble LPSC)
 1. Change to use ttbb weights saved in Ntuples, expect to make the program faster.
 2. Calculate total weights inside the sys-loop, DO NOT skip zero weight events any more.
 
-2016.07.19 15:20 (Grenoble)
+2016.07.19 15:20 (Grenoble LPSC)
 1. Add "mRegions.Clear()" in SysName-Loop. This should fix the multi-fill bug.
+
+2016.07.19 16:43 (Grenoble LPSC)
+1. Add new function "PrintDSInfo()" to DSHandler -> But currently print out nothing, for future use.
+2. Show infomation when adding files into TChain.

@@ -121,3 +121,10 @@ string DSHandler::GetSampleID(string path) {
     return result[1];
   }
 }
+
+void DSHandler::PrintDSInfo(int nDS) const
+{
+  cout<<endl;
+  printf("DSHandler:: DSInfo: \n");
+  cout<<endl;
+}

@@ -65,8 +65,9 @@ bool HplusRun::run() {
   std::vector<string> files;
   for (int iSample = 0; iSample < nSamples; ++iSample) {
     files = mDS->GetFiles(iSample);
-    if (files.empty())
-      continue;
+    if (files.empty()){
+      cout<<"HplusRun:: Skipping empty sample..."<<endl;
+      continue;}
     // Init general objs
     mWorker->Reset();
     mHelpWorker->Reset();
@@ -80,9 +81,16 @@ bool HplusRun::run() {
       mWorker->Reset();
       mHelpWorker->Reset();
       mWorker->SetName(mTreeName.c_str());
+      int nTotalFiles = files.size();
+      int nFilesSlice = nTotalFiles / 5;
+      nFilesSlice = nFilesSlice!=0?nFilesSlice:nFilesSlice+1;
+      int FileIndex = 1;
       for (auto file : files) {
         mWorker->Add(file.c_str());
         mHelpWorker->Add(file.c_str());
+        if (FileIndex % nFilesSlice == 0)
+          printf("HplusRun:: Adding Files %i / %i \n", FileIndex, nTotalFiles);
+        FileIndex++;
       }
       // Set up formulas
       std::vector<string> mRegions = mConfig->GetRegions();

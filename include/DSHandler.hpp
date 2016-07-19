@@ -42,6 +42,11 @@ public:
   void Clear();
   void DeletePath(string path);
   bool Initialize();
+  void PrintCurrentDSInfo() const
+  {
+    PrintDSInfo(mCurrentDS);
+  };
+  void PrintDSInfo(int nDS) const;
 
   const std::vector<string> &Next();
   const std::vector<string> GetAllTypes() { return mSampleTypesVec; };
