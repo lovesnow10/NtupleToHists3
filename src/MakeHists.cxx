@@ -195,6 +195,7 @@ bool MakeHists::run(TTree *event, map<string, float> weights,
     }
 
     // Selectioins!
+    mRegions.clear();
     for (int ientry = 0; ientry < formulas->GetEntries(); ++ientry) {
       TTreeFormula *formula = formulas->GetFormula(ientry);
       if (formula->EvalInstance()) {

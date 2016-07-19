@@ -1,6 +1,9 @@
 2016.07.12 17:57
 Create CHANGLOG! Cheers!
 
-2016.07.12 17:57
+2016.07.12 17:57 (Grenoble)
 1. Change to use ttbb weights saved in Ntuples, expect to make the program faster.
 2. Calculate total weights inside the sys-loop, DO NOT skip zero weight events any more.
+
+2016.07.19 15:20 (Grenoble)
+1. Add "mRegions.Clear()" in SysName-Loop. This should fix the multi-fill bug.
