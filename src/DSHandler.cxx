@@ -15,7 +15,7 @@ DSHandler::DSHandler(string InputTxt) {
   }
   mPathsVec.clear();
   mSampleTypesVec.clear();
-  mSampleTypesVec.push_back("Fakes");
+  //mSampleTypesVec.push_back("Fakes");
   string line;
   int tmpID = 0;
   while (getline(in, line)) {

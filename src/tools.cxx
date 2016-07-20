@@ -2,6 +2,7 @@
 #include "TList.h"
 #include "TString.h"
 #include "TSystemDirectory.h"
+#include <algorithm>
 
 string Tools::GenName(string VarName, string Region, string Sample,
                       string SysName) {
@@ -155,4 +156,17 @@ std::vector<string> Tools::GrabRootFiles(string path) {
     }
   }
   return rootfiles;
+}
+
+bool Tools::CheckYieldsMap(const std::map<string, std::map<string, float> > mYields, string mRegion, string mSample)
+{
+  if (mYields.find(mRegion) != mYields.end())
+  {
+    if (mYields.at(mRegion).find(mSample) != mYields.at(mRegion).end())
+    {
+      return true;
+    }
+    else return false;
+  }
+  else return false;
 }

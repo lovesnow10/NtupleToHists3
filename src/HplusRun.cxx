@@ -44,6 +44,22 @@ bool HplusRun::initialize() {
     bControl["doSysmetic"] = true;
     else bControl["doSysmetic"] = false;
 
+  if (mConfig->GetCommonSetting("Fakes")[0] == "0")
+  {
+    bControl["doFakes"] = false;
+    bControl["doFakesOnly"] = false;
+  }
+  else if (mConfig->GetCommonSetting("Fakes")[0] == "1")
+  {
+    bControl["doFakes"] = true;
+    bControl["doFakesOnly"] = false;
+  }
+  else
+  {
+    bControl["doFakes"] = true;
+    bControl["doFakesOnly"] = true;
+  }
+
   mMCTree = mConfig->GetCommonSetting("MCTree");
   mDTTree = mConfig->GetCommonSetting("DTTree");
 

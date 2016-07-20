@@ -37,7 +37,7 @@ private:
 
   bool isNominal;
 
-  void InitYields(DSHandler *ds);
+  //void InitYields(DSHandler *ds);
   void FillYields();
 
 public:

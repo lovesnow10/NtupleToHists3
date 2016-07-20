@@ -28,6 +28,7 @@ public:
   string GetSampleType(int DSID);
   std::vector<string> GrabRootFiles(string path);
   string GetDataYear(int runNumber);
+  bool CheckYieldsMap(const std::map<string, std::map<string, float>> mYields, string mRegion, string mSample);
 
   template <typename T> T *GetTreeValue(TTree *fTree, string fVar) {
     T *fValue = 0x0;
