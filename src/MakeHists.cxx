@@ -92,10 +92,17 @@ bool MakeHists::run(TTree *event, map<string, float> weights,
     if (isFake(mEvent))
       mSample = "Fakes";
   }
-  if (mSample == "Fakes" && !doFakes)
-    return false;
-  if (mSample != "Fakes" && doFakesOnly)
-    return false;
+  if (mSample == "Fakes")
+  {
+    if (!doFakes) return false;
+  }
+  else{
+    if (doFakes && doFakesOnly) return false;
+  }
+  //if (mSample == "Fakes" && !doFakes)
+  //  return false;
+  //if (mSample != "Fakes" && doFakesOnly)
+  //  return false;
 
   /*weight_mc = *(Tools::Instance().GetTreeValue<float>(mEvent, "weight_mc"));
   weight_pileup =
