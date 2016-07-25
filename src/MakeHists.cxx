@@ -413,13 +413,13 @@ bool MakeHists::finalize(TFile *fFile) {
 void MakeHists::FillYields() {
   int nRegions, nSamples;
   nRegions = mRawYields.size();
-  nSamples = mRawYields.at(0).size();
+  nSamples = (mRawYields.begin()->second).size();
 
   hs->AddHist2D("hist_raw_yields", nSamples, 0, nSamples, nRegions, 0,
                 nRegions);
   hs->AddHist2D("hist_weighted_yields", nSamples, 0, nSamples, nRegions, 0,
                 nRegions);
-  int iRegion(1), iSample(1);
+  int iRegion = 1;
   for (auto region : mRawYields) {
     hs->GetHist2D("hist_raw_yields")
         ->GetYaxis()
@@ -427,6 +427,7 @@ void MakeHists::FillYields() {
     hs->GetHist2D("hist_weighted_yields")
         ->GetYaxis()
         ->SetBinLabel(iRegion, region.first.c_str());
+    int iSample = 1;
     for (auto sample : region.second) {
       hs->GetHist2D("hist_raw_yields")
           ->GetXaxis()

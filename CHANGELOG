@@ -15,3 +15,6 @@ Create CHANGLOG! Cheers!
 2016.07.20 16:22 (Grenoble LPSC)
 1. Add new COMMON setting "Fakes", 0->skip fake event, 1->normal, 2->only save fake evnets
 2. Change how to fill evnets yields.
+
+2016.07.25 13:21 (Grenoble LPSC)
+1. Fix bug when getting nSamples in MakeHists::FillYields() function.
