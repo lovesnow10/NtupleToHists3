@@ -242,7 +242,7 @@ void GetSysWeights(TTree *event, std::map<string, float> &mSysWeights) {
           event, "weight_bTagSF_70_eigenvars_Light_up"));
   std::vector<float> bTagSF_70_eigenvars_Light_DOWN =
       *(Tools::Instance().GetTreeValue<std::vector<float>>(
-          event, "weight_bTagSF_770eigenvars_Light_down"));
+          event, "weight_bTagSF_70eigenvars_Light_down"));
   mSysWeights["bTagSF_70_extrapolation_UP"] =
       *(Tools::Instance().GetTreeValue<float>(
           event, "weight_bTagSF_70_extrapolation_up"));
