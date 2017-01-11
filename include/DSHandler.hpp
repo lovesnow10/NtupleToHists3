@@ -19,7 +19,6 @@ class DSHandler {
 private:
   std::vector<string> mPathsVec;
   std::map<int, std::vector<string>> mFilesMap;
-  std::vector<string> mSampleTypesVec;
   std::map<int, string> mSampleTypeMap;
 
   int mTotalDS;
@@ -49,7 +48,6 @@ public:
   void PrintDSInfo(int nDS) const;
 
   const std::vector<string> &Next();
-  const std::vector<string> GetAllTypes() { return mSampleTypesVec; };
   string GetSampleType(int nDS) {return mSampleTypeMap.at(nDS);};
   int GetSampleIndex() {return this->mCurrentDS;};
   int GetNSamples() {return mTotalDS;};

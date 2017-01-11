@@ -14,23 +14,17 @@ DSHandler::DSHandler(string InputTxt) {
     exit(-1);
   }
   mPathsVec.clear();
-  mSampleTypesVec.clear();
-  //mSampleTypesVec.push_back("Fakes");
   string line;
   int tmpID = 0;
   while (getline(in, line)) {
-    mPathsVec.push_back(line);
-    string ID = GetSampleID(line);
-    if (ID != "") {
+    string TYPE = GetSampleID(line);
+    if (TYPE != "") {
+      mPathsVec.push_back(line);
       string tmpType;
-      if (ID.length() == 8) {
+      if (TYPE == "data") {
         tmpType = "DATA";
-      } else {
-        tmpType = Tools::Instance().GetSampleType(atoi(ID.c_str()));
-      }
-      if (find(mSampleTypesVec.begin(), mSampleTypesVec.end(), tmpType) ==
-          mSampleTypesVec.end()) {
-        mSampleTypesVec.push_back(tmpType);
+      } else if (TYPE == "mc"){
+        tmpType = "MC"
       }
       mSampleTypeMap[tmpID++] = tmpType;
     }
@@ -112,7 +106,7 @@ const std::vector<string> &DSHandler::Next() {
 }
 
 string DSHandler::GetSampleID(string path) {
-  const regex pattern(".*\\.(\\d+)\\..*");
+  const regex pattern(".*\\.(.*)(15|16)\\_13TeV\\..*");
   std::match_results<std::string::const_iterator> result;
   bool valid = std::regex_match(path, result, pattern);
   if (!valid) {

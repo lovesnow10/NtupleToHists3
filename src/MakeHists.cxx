@@ -99,28 +99,6 @@ bool MakeHists::run(TTree *event, map<string, float> weights,
   else{
     if (doFakes && doFakesOnly) return false;
   }
-  //if (mSample == "Fakes" && !doFakes)
-  //  return false;
-  //if (mSample != "Fakes" && doFakesOnly)
-  //  return false;
-
-  /*weight_mc = *(Tools::Instance().GetTreeValue<float>(mEvent, "weight_mc"));
-  weight_pileup =
-      *(Tools::Instance().GetTreeValue<float>(mEvent, "weight_pileup"));
-  weight_jvt = *(Tools::Instance().GetTreeValue<float>(mEvent, "weight_jvt"));
-  weight_leptonSF =
-      *(Tools::Instance().GetTreeValue<float>(mEvent, "weight_leptonSF"));
-  weight_bTagSF_77 =
-      *(Tools::Instance().GetTreeValue<float>(mEvent, "weight_bTagSF_77"));
-
-  if (mSample == "ttlight" || mSample == "ttcc" || mSample == "ttbb")
-    tmpWeights = tmpWeights * weight_mc * weight_bTagSF_77 * weight_leptonSF *
-                 weight_jvt * weight_pileup * weights["ttbb_Nominal_weight"] *
-                 weights["weight_NNLO"];
-  else
-    tmpWeights = tmpWeights * weight_mc * weight_bTagSF_77 * weight_leptonSF *
-                 weight_jvt * weight_pileup;
-}*/
 
   for (auto w : mSysName) {
     if (!isNominal && w != "nominal")
@@ -328,94 +306,6 @@ bool MakeHists::finalize(TFile *fFile) {
   printf("MakeHists:: finalize:: MakeHists has finished running!\n");
   return true;
 }
-
-/*void MakeHists::InitYields(DSHandler *ds) {
-  std::vector<string> regions = mConfig->GetRegions();
-  std::vector<string> samples = ds->GetAllTypes();
-  int nSamples = samples.size();
-  int nRegions = regions.size();
-  if (!(find(samples.begin(), samples.end(), "ttbar") == samples.end())) {
-    nSamples += 2;
-  }
-  hs->AddHist2D("hist_raw_yields", nSamples, 0, nSamples, nRegions, 0,
-                nRegions);
-  hs->AddHist2D("hist_weighted_yields", nSamples, 0, nSamples, nRegions, 0,
-                nRegions);
-  for (auto region : regions) {
-    for (auto sample : samples) {
-      if (sample == "ttbar") {
-        mRawYields[region]["ttlight"] = 0;
-        mWeightedYields[region]["ttlight"] = 0;
-        mWeightedYieldsError[region]["ttlight"] = 0;
-        mRawYields[region]["ttcc"] = 0;
-        mWeightedYields[region]["ttcc"] = 0;
-        mWeightedYieldsError[region]["ttcc"] = 0;
-        mRawYields[region]["ttbb"] = 0;
-        mWeightedYields[region]["ttbb"] = 0;
-        mWeightedYieldsError[region]["ttbb"] = 0;
-      } else {
-        mRawYields[region][sample] = 0;
-        mWeightedYields[region][sample] = 0;
-        mWeightedYieldsError[region][sample] = 0;
-      }
-    }
-  }
-  int nx = 1, ny = 1;
-  for (auto region : regions) {
-    hs->GetHist2D("hist_raw_yields")
-        ->GetYaxis()
-        ->SetBinLabel(ny, region.c_str());
-    hs->GetHist2D("hist_weighted_yields")
-        ->GetYaxis()
-        ->SetBinLabel(ny++, region.c_str());
-  }
-  for (auto sample : samples) {
-    if (sample != "ttbar") {
-      hs->GetHist2D("hist_raw_yields")
-          ->GetXaxis()
-          ->SetBinLabel(nx, sample.c_str());
-      hs->GetHist2D("hist_weighted_yields")
-          ->GetXaxis()
-          ->SetBinLabel(nx++, sample.c_str());
-    } else {
-      hs->GetHist2D("hist_raw_yields")->GetXaxis()->SetBinLabel(nx, "ttlight");
-      hs->GetHist2D("hist_weighted_yields")
-          ->GetXaxis()
-          ->SetBinLabel(nx++, "ttlight");
-      hs->GetHist2D("hist_raw_yields")->GetXaxis()->SetBinLabel(nx, "ttcc");
-      hs->GetHist2D("hist_weighted_yields")
-          ->GetXaxis()
-          ->SetBinLabel(nx++, "ttcc");
-      hs->GetHist2D("hist_raw_yields")->GetXaxis()->SetBinLabel(nx, "ttbb");
-      hs->GetHist2D("hist_weighted_yields")
-          ->GetXaxis()
-          ->SetBinLabel(nx++, "ttbb");
-    }
-  }
-}*/
-
-/*void MakeHists::FillYields() {
-  int nx = hs->GetHist2D("hist_raw_yields")->GetNbinsX();
-  int ny = hs->GetHist2D("hist_raw_yields")->GetNbinsY();
-  for (int ix = 1; ix < nx + 1; ix++) {
-    string xname =
-        hs->GetHist2D("hist_raw_yields")->GetXaxis()->GetBinLabel(ix);
-    for (int iy = 1; iy < ny + 1; iy++) {
-      string yname =
-          hs->GetHist2D("hist_raw_yields")->GetYaxis()->GetBinLabel(iy);
-      string tmpName = yname + "_" + xname;
-      printf("HistsGen:: FillYields:: Filling Yields %s\n", tmpName.c_str());
-      float raw, weighted, weighted_error;
-      raw = mRawYields.at(yname).at(xname);
-      weighted = mWeightedYields.at(yname).at(xname);
-      weighted_error = mWeightedYieldsError.at(yname).at(xname);
-      hs->GetHist2D("hist_raw_yields")->SetBinContent(ix, iy, raw);
-      hs->GetHist2D("hist_weighted_yields")->SetBinContent(ix, iy, weighted);
-      hs->GetHist2D("hist_weighted_yields")
-          ->SetBinError(ix, iy, TMath::Sqrt(weighted_error));
-    }
-  }
-}*/
 
 void MakeHists::FillYields() {
   int nRegions, nSamples;
