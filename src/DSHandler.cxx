@@ -24,7 +24,7 @@ DSHandler::DSHandler(string InputTxt) {
       if (TYPE == "data") {
         tmpType = "DATA";
       } else if (TYPE == "mc"){
-        tmpType = "MC"
+        tmpType = "MC";
       }
       mSampleTypeMap[tmpID++] = tmpType;
     }
