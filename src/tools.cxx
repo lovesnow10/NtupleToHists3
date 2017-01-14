@@ -42,6 +42,9 @@ string Tools::GetSampleType(int DSID) {
   if (DSID == 410000 || DSID == 410009 || DSID == 410120 || DSID == 410121) {
     return "ttbar";
   }
+  if (DSID == 410501 || DSID == 410503 || DSID == 410504 || DSID == 410505) {
+    return "ttbar";
+  }
   if (DSID >= 343365 && DSID <= 343367) {
     return "ttH";
   }
